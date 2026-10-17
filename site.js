@@ -45,11 +45,12 @@ const spawn = (n) => {
   const m = Math.min(W, H);
   balls = Array.from({ length: n }, (_, i) => {
     const r = m * (.035 + Math.random() * .035), x = r + Math.random() * (W - 2 * r);
-    // Spread across the whole width. Most head for their nearer side but about a third cross the screen,
-    // and each one leaves at its own pace, so they don't part like a curtain.
-    const near = x < W / 2 ? -1 : 1, out = Math.random() < .35 ? -near : near, dist = out < 0 ? x + r : W - x + r;
-    return { x, y: -r - Math.random() * H * .3, r, vx: out * dist / (1.3 + Math.random() * 1.5), vy: H * (Math.random() - .3) * .5,
-      e: BOUNCE - .07 + Math.random() * .12, wait: i * GAP * (.4 + Math.random() * 1.2),
+    // Spread across the whole width. Half head for their nearer side and half cross the screen; each one
+    // leaves at its own pace, starts at its own height and speed, and bounces its own way, so nothing
+    // reads as a pattern (no curtain, no rows).
+    const near = x < W / 2 ? -1 : 1, out = Math.random() < .5 ? -near : near, dist = out < 0 ? x + r : W - x + r;
+    return { x, y: -r - Math.random() * H * .45, r, vx: out * dist / (1.1 + Math.random() * 2), vy: H * (Math.random() - .45) * .9,
+      e: BOUNCE - .1 + Math.random() * .18, wait: i * GAP * (.1 + Math.random() * 1.8),
       c: COLS[i % COLS.length], a: Math.random() * 6 };
   }).sort((p, q) => p.r - q.r);
 };
