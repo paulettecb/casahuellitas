@@ -39,6 +39,7 @@ const G = () => H * 3;                // gravity: a fall across the screen takes
 const BOUNCE = 0.78;                  // speed kept on each floor bounce
 const FRICTION = 0.98;                // sideways speed kept each time a ball touches the floor
 const STEP = 1 / 240, MAX_TIME = 4.5, GAP = .02; // GAP: seconds between drops
+const SPEED = 1.6;                    // plays the whole effect faster without changing how the balls bounce
 
 const spawn = (n) => {
   const m = Math.min(W, H);
@@ -82,7 +83,7 @@ const open = () => { if (opened) return; opened = true; po.classList.add('off');
 let acc = 0;
 const frame = (now) => {
   if (!running) return;
-  acc += Math.min(.05, (now - last) / 1000); last = now;
+  acc += Math.min(.05, (now - last) / 1000) * SPEED; last = now;
   while (acc >= STEP) { step(STEP); acc -= STEP; }
   draw();
   if (!opened && (balls.every((b) => b.out) || (now - born) / 1000 > MAX_TIME)) open();
