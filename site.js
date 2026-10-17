@@ -45,10 +45,12 @@ const spawn = (n) => {
   const m = Math.min(W, H);
   balls = Array.from({ length: n }, (_, i) => {
     const r = m * (.035 + Math.random() * .035), x = r + Math.random() * (W - 2 * r);
-    // spread across the whole width so they don't land on each other, each drifting toward its nearer side
-    // at a speed that gets it off screen after two or three bounces
-    const out = x < W / 2 ? -1 : 1, dist = out < 0 ? x + r : W - x + r;
-    return { x, y: -r - Math.random() * H * .15, r, vx: out * dist / (1.9 + Math.random() * .9), vy: 0, wait: i * GAP,
+    // Spread across the whole width. Half head for their nearer side and half cross the screen; each one
+    // leaves at its own pace, starts at its own height and speed, and bounces its own way, so nothing
+    // reads as a pattern (no curtain, no rows).
+    const near = x < W / 2 ? -1 : 1, out = Math.random() < .5 ? -near : near, dist = out < 0 ? x + r : W - x + r;
+    return { x, y: -r - Math.random() * H * .45, r, vx: out * dist / (1.1 + Math.random() * 2), vy: H * (Math.random() - .45) * .9,
+      e: BOUNCE - .1 + Math.random() * .18, wait: i * GAP * (.1 + Math.random() * 1.8),
       c: COLS[i % COLS.length], a: Math.random() * 6 };
   }).sort((p, q) => p.r - q.r);
 };
@@ -63,7 +65,7 @@ const step = (dt) => {
     if (b.out) continue;
     if (b.y > H - b.r) {
       b.y = H - b.r;
-      if (b.vy > 0) b.vy = b.vy * BOUNCE < g * .06 ? 0 : -b.vy * BOUNCE;
+      if (b.vy > 0) b.vy = b.vy * b.e < g * .06 ? 0 : -b.vy * b.e; // each ball has its own bounce, some livelier than others
       b.vx *= FRICTION;
       // a ball that has stopped bouncing rolls out instead of sitting there
       if (b.vy === 0 && Math.abs(b.vx) < W * .2) b.vx = (b.x < W / 2 ? -1 : 1) * W * .2;
