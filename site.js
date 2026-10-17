@@ -34,44 +34,38 @@ let W = innerWidth, H = innerHeight;
 const size = () => { W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; };
 
 // Physics in pixels and seconds, so it runs the same on 60 Hz and 120 Hz screens.
-const G = () => H * 4;                // gravity: a fall across the screen takes about 0.7 s
-const BOUNCE = 0.72, FRICTION = 0.9;  // energy kept on each floor bounce, sideways speed kept on contact
-const KICK = () => W * 0.55;          // sideways speed a ball keeps after a floor bounce, toward its side
-const STEP = 1 / 240, MAX_TIME = 3.5, GAP = .018; // GAP: seconds between drops
+// Tuned like tennis balls: lively bounces that keep most of their height, little loss on the floor.
+const G = () => H * 3;                // gravity: a fall across the screen takes about 0.8 s
+const BOUNCE = 0.78;                  // speed kept on each floor bounce
+const FRICTION = 0.98;                // sideways speed kept each time a ball touches the floor
+const STEP = 1 / 240, MAX_TIME = 4.5, GAP = .02; // GAP: seconds between drops
 
 const spawn = (n) => {
   const m = Math.min(W, H);
   balls = Array.from({ length: n }, (_, i) => {
-    const r = m * (.035 + Math.random() * .035), x = W * (.25 + Math.random() * .5);
-    const out = x < W / 2 ? -1 : 1;    // dropped near the middle, drifting toward the nearer side
-    return { x, y: -r, r, vx: out * W * (.05 + Math.random() * .15), vy: 0, wait: i * GAP,
+    const r = m * (.035 + Math.random() * .035), x = r + Math.random() * (W - 2 * r);
+    // spread across the whole width so they don't land on each other, each drifting toward its nearer side
+    // at a speed that gets it off screen after two or three bounces
+    const out = x < W / 2 ? -1 : 1, dist = out < 0 ? x + r : W - x + r;
+    return { x, y: -r - Math.random() * H * .15, r, vx: out * dist / (1.9 + Math.random() * .9), vy: 0, wait: i * GAP,
       c: COLS[i % COLS.length], a: Math.random() * 6 };
-  });
+  }).sort((p, q) => p.r - q.r);
 };
+// Balls pass in front of or behind each other instead of colliding: hits between balls ate the
+// bounces and made them land like bowling balls. Drawing big ones last makes them read as closer.
 const gone = (b) => b.x + b.r < 0 || b.x - b.r > W || b.y - b.r > H;
 
 const step = (dt) => {
   const g = G();
   for (const b of balls) { if (b.wait > 0) { b.wait -= dt; continue; } if (b.out) continue; b.vy += g * dt; b.x += b.vx * dt; b.y += b.vy * dt; b.a += (b.vx / b.r) * dt; }
-  // ball-to-ball contacts, a few passes so piles settle instead of shaking; heavier balls push lighter ones
-  for (let pass = 0; pass < 3; pass++) for (let i = 0; i < balls.length; i++) for (let k = i + 1; k < balls.length; k++) {
-    const p = balls[i], q = balls[k]; if (p.out || q.out || p.wait > 0 || q.wait > 0) continue;
-    const dx = q.x - p.x, dy = q.y - p.y, d = Math.hypot(dx, dy), min = p.r + q.r;
-    if (!d || d >= min) continue;
-    const nx = dx / d, ny = dy / d, mp = p.r * p.r, mq = q.r * q.r, sum = mp + mq, o = min - d;
-    p.x -= nx * o * mq / sum; p.y -= ny * o * mq / sum; q.x += nx * o * mp / sum; q.y += ny * o * mp / sum;
-    const rv = (q.vx - p.vx) * nx + (q.vy - p.vy) * ny;
-    if (rv < 0) { const j = -(1 + BOUNCE) * rv / sum; p.vx -= j * mq * nx; p.vy -= j * mq * ny; q.vx += j * mp * nx; q.vy += j * mp * ny; }
-  }
-  // the floor goes last, so no push from another ball can leave a ball inside it
   for (const b of balls) {
     if (b.out) continue;
     if (b.y > H - b.r) {
       b.y = H - b.r;
       if (b.vy > 0) b.vy = b.vy * BOUNCE < g * .06 ? 0 : -b.vy * BOUNCE;
       b.vx *= FRICTION;
-      const side = b.x < W / 2 ? -1 : 1;
-      if (b.vx * side < KICK()) b.vx = side * KICK();
+      // a ball that has stopped bouncing rolls out instead of sitting there
+      if (b.vy === 0 && Math.abs(b.vx) < W * .2) b.vx = (b.x < W / 2 ? -1 : 1) * W * .2;
     }
     if (b.wait <= 0 && gone(b)) b.out = true;
   }
