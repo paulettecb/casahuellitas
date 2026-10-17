@@ -19,39 +19,107 @@ ft.innerHTML = `<div class="wrap"><div class="g"><div><img src="assets/logo/logo
 <div><h4>VISÍTANOS</h4><a href="nosotros.html" data-go>Agua Blanca, frente a Bugambilias</a><a href="https://g.co/kgs/T5Ybaf">Cómo llegar</a><a href="https://www.instagram.com/casa_huellitas">@casa_huellitas</a><span style="display:block;padding:4px 0;font:600 16px var(--font-body)">L–D · 9:00 am – 6:00 pm</span></div></div>
 <div style="margin-top:50px;padding-top:20px;border-top:1px solid #333;font:500 13px var(--font-body);color:var(--tinta-40)">© Casa Huellitas · Hotel canino</div></div>`;
 document.body.appendChild(ft);
-// page transition: balls rain in, settle, then the floor opens and the curtain lifts
+// page transition: balls rain in, bounce with real physics and fly out the sides;
+// once the screen is empty the curtain lifts. On a link click the balls start falling
+// on this page and keep going on the next one (their state travels in sessionStorage).
 const po = document.createElement('div'); po.className = 'fx-pageout';
 po.innerHTML = '<canvas></canvas><div class="ld"><img src="assets/logo/mark-ink.png" alt=""></div>';
 document.body.appendChild(po);
 const cv = po.querySelector('canvas'), cx = cv.getContext('2d');
 const COLS = ['#FF8A4C', '#FFC93C', '#6DBE6B', '#F28DA6', '#FFFFFF', '#5DB2E3'];
-let balls = [], running = false, floor = true, t0 = 0; const dpr = Math.min(2, devicePixelRatio || 1);
-const size = () => { cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; };
-const spawn = (n) => { const W = innerWidth, m = Math.min(W, innerHeight); balls = Array.from({ length: n }, (_, i) => { const r = m * (.035 + Math.random() * .035); return { x: r + Math.random() * (W - 2 * r), y: -r - 10, r, vx: (Math.random() - .5) * 3, vy: 2 + Math.random() * 3, c: COLS[i % COLS.length], a: Math.random() * 6, t: i * 28 }; }); };
-const draw = (now) => {
-  if (!running) return; const W = innerWidth, H = innerHeight, el = now - t0; cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
-  const live = balls.filter((b) => el > b.t);
-  for (const b of live) { b.vy += .6; b.x += b.vx; b.y += b.vy; b.a += b.vx / b.r;
-    if (floor && b.y > H - b.r) { b.y = H - b.r; b.vy = Math.abs(b.vy) < 2 ? 0 : -b.vy * .62; b.vx *= .96; }
-    if (b.x < b.r) { b.x = b.r; b.vx = Math.abs(b.vx) * .7; } if (b.x > W - b.r) { b.x = W - b.r; b.vx = -Math.abs(b.vx) * .7; } }
-  for (let i = 0; i < live.length; i++) for (let j = i + 1; j < live.length; j++) { const p = live[i], q = live[j], dx = q.x - p.x, dy = q.y - p.y, d = Math.hypot(dx, dy), m = p.r + q.r;
-    if (d > 0 && d < m) { const nx = dx / d, ny = dy / d, o = (m - d) / 2; p.x -= nx * o; p.y -= ny * o; q.x += nx * o; q.y += ny * o; const rv = (q.vx - p.vx) * nx + (q.vy - p.vy) * ny; if (rv < 0) { const k = -rv * .8; p.vx -= nx * k; p.vy -= ny * k; q.vx += nx * k; q.vy += ny * k; } } }
-  for (const b of live) { cx.save(); cx.translate(b.x, b.y); cx.rotate(b.a); cx.beginPath(); cx.arc(0, 0, b.r, 0, 6.2832); cx.fillStyle = b.c; cx.fill(); cx.lineWidth = 3; cx.strokeStyle = '#141414'; cx.stroke();
-    cx.lineWidth = Math.max(2, b.r * .08); cx.beginPath(); cx.arc(-b.r * 1.15, 0, b.r * .85, -.75, .75); cx.stroke(); cx.beginPath(); cx.arc(b.r * 1.15, 0, b.r * .85, Math.PI - .75, Math.PI + .75); cx.stroke(); cx.restore(); }
-  requestAnimationFrame(draw);
+const KEY = 'ch-balls';
+let balls = [], running = false, last = 0, born = 0, opened = false;
+const dpr = Math.min(2, devicePixelRatio || 1);
+let W = innerWidth, H = innerHeight;
+const size = () => { W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; };
+
+// Physics in pixels and seconds, so it runs the same on 60 Hz and 120 Hz screens.
+const G = () => H * 4;                // gravity: a fall across the screen takes about 0.7 s
+const BOUNCE = 0.72, FRICTION = 0.9;  // energy kept on each floor bounce, sideways speed kept on contact
+const KICK = () => W * 0.55;          // sideways speed a ball keeps after a floor bounce, toward its side
+const STEP = 1 / 240, MAX_TIME = 3.5, GAP = .018; // GAP: seconds between drops
+
+const spawn = (n) => {
+  const m = Math.min(W, H);
+  balls = Array.from({ length: n }, (_, i) => {
+    const r = m * (.035 + Math.random() * .035), x = W * (.25 + Math.random() * .5);
+    const out = x < W / 2 ? -1 : 1;    // dropped near the middle, drifting toward the nearer side
+    return { x, y: -r, r, vx: out * W * (.05 + Math.random() * .15), vy: 0, wait: i * GAP,
+      c: COLS[i % COLS.length], a: Math.random() * 6 };
+  });
 };
-const start = (n) => { size(); spawn(n); floor = true; t0 = performance.now(); if (!running) { running = true; requestAnimationFrame(draw); } };
+const gone = (b) => b.x + b.r < 0 || b.x - b.r > W || b.y - b.r > H;
+
+const step = (dt) => {
+  const g = G();
+  for (const b of balls) { if (b.wait > 0) { b.wait -= dt; continue; } if (b.out) continue; b.vy += g * dt; b.x += b.vx * dt; b.y += b.vy * dt; b.a += (b.vx / b.r) * dt; }
+  // ball-to-ball contacts, a few passes so piles settle instead of shaking; heavier balls push lighter ones
+  for (let pass = 0; pass < 3; pass++) for (let i = 0; i < balls.length; i++) for (let k = i + 1; k < balls.length; k++) {
+    const p = balls[i], q = balls[k]; if (p.out || q.out || p.wait > 0 || q.wait > 0) continue;
+    const dx = q.x - p.x, dy = q.y - p.y, d = Math.hypot(dx, dy), min = p.r + q.r;
+    if (!d || d >= min) continue;
+    const nx = dx / d, ny = dy / d, mp = p.r * p.r, mq = q.r * q.r, sum = mp + mq, o = min - d;
+    p.x -= nx * o * mq / sum; p.y -= ny * o * mq / sum; q.x += nx * o * mp / sum; q.y += ny * o * mp / sum;
+    const rv = (q.vx - p.vx) * nx + (q.vy - p.vy) * ny;
+    if (rv < 0) { const j = -(1 + BOUNCE) * rv / sum; p.vx -= j * mq * nx; p.vy -= j * mq * ny; q.vx += j * mp * nx; q.vy += j * mp * ny; }
+  }
+  // the floor goes last, so no push from another ball can leave a ball inside it
+  for (const b of balls) {
+    if (b.out) continue;
+    if (b.y > H - b.r) {
+      b.y = H - b.r;
+      if (b.vy > 0) b.vy = b.vy * BOUNCE < g * .06 ? 0 : -b.vy * BOUNCE;
+      b.vx *= FRICTION;
+      const side = b.x < W / 2 ? -1 : 1;
+      if (b.vx * side < KICK()) b.vx = side * KICK();
+    }
+    if (b.wait <= 0 && gone(b)) b.out = true;
+  }
+};
+
+const draw = () => {
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
+  for (const b of balls) { if (b.out || b.wait > 0) continue;
+    cx.save(); cx.translate(b.x, b.y); cx.rotate(b.a); cx.beginPath(); cx.arc(0, 0, b.r, 0, 6.2832); cx.fillStyle = b.c; cx.fill(); cx.lineWidth = 3; cx.strokeStyle = '#141414'; cx.stroke();
+    cx.lineWidth = Math.max(2, b.r * .08); cx.beginPath(); cx.arc(-b.r * 1.15, 0, b.r * .85, -.75, .75); cx.stroke(); cx.beginPath(); cx.arc(b.r * 1.15, 0, b.r * .85, Math.PI - .75, Math.PI + .75); cx.stroke(); cx.restore(); }
+};
+
+const open = () => { if (opened) return; opened = true; po.classList.add('off'); setTimeout(() => { running = false; }, 800); };
+let acc = 0;
+const frame = (now) => {
+  if (!running) return;
+  acc += Math.min(.05, (now - last) / 1000); last = now;
+  while (acc >= STEP) { step(STEP); acc -= STEP; }
+  draw();
+  if (!opened && (balls.every((b) => b.out) || (now - born) / 1000 > MAX_TIME)) open();
+  requestAnimationFrame(frame);
+};
+const run = () => { opened = false; acc = 0; born = last = performance.now(); if (!running) { running = true; requestAnimationFrame(frame); } };
 addEventListener('resize', size);
+size();
+
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const first = !sessionStorage.getItem('ch-visited'); sessionStorage.setItem('ch-visited', '1');
-const lift = (wait) => setTimeout(() => { floor = false; balls.forEach((b) => { b.vy = Math.max(b.vy, 4); }); setTimeout(() => po.classList.add('off'), 350); setTimeout(() => { running = false; }, 1200); }, wait);
-if (reduce) { po.classList.add('off'); } else { start(first ? 40 : 24); lift(first ? 2000 : 1300); }
+let carried = null;
+try { const s = JSON.parse(sessionStorage.getItem(KEY) || 'null'); sessionStorage.removeItem(KEY); if (s && Date.now() - s.t < 2000) carried = s; } catch (e) {}
+if (reduce) { po.classList.add('off'); }
+else if (carried) {
+  // pick up the balls where the previous page left them, scaled to this window
+  const sx = W / carried.w, sy = H / carried.h;
+  balls = carried.b.map((b) => ({ ...b, x: b.x * sx, y: b.y * sy, vx: b.vx * sx, vy: b.vy * sy }));
+  run();
+} else { spawn(first ? 34 : 22); run(); }
+
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[data-go]'); if (!a || e.metaKey || e.ctrlKey) return; e.preventDefault();
   if (reduce) { location.href = a.getAttribute('href'); return; }
   po.style.transition = 'none'; po.classList.remove('off'); po.classList.add('from'); po.style.setProperty('--x', e.clientX + 'px'); po.style.setProperty('--y', e.clientY + 'px'); po.offsetWidth;
-  po.style.transition = ''; po.classList.remove('from'); running = false; cx.clearRect(0, 0, cv.width, cv.height);
-  setTimeout(() => { location.href = a.getAttribute('href'); }, 600);
+  po.style.transition = ''; po.classList.remove('from');
+  spawn(22); run();
+  setTimeout(() => {
+    try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), w: W, h: H, b: balls.filter((b) => !b.out) })); } catch (err) {}
+    location.href = a.getAttribute('href');
+  }, 600);
 });
 addEventListener('pageshow', (e) => { if (e.persisted) { po.classList.add('off'); running = false; } });
 if (window.HuellitasFX) { HuellitasFX.pawTrail(); HuellitasFX.reveal(); HuellitasFX.parallax(); }
