@@ -1,0 +1,82 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Casa Huellitas — Dirección B · Estudio</title><link rel="stylesheet" href="../../styles.css">
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--tinta);color:var(--crema);font-family:var(--font-body);overflow-x:hidden;cursor:none}a{color:inherit}a:hover{color:var(--cielo-200)}
+@media (hover:none){body{cursor:auto}.cur{display:none}}
+.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(18px,4vw,48px)}
+.cur{position:fixed;left:0;top:0;width:18px;height:18px;border-radius:50%;background:var(--cielo-200);pointer-events:none;z-index:9997;mix-blend-mode:difference;transition:width .3s cubic-bezier(.34,1.56,.64,1),height .3s cubic-bezier(.34,1.56,.64,1);display:grid;place-items:center;font:800 13px var(--font-body);color:var(--tinta)}
+.cur.big{width:96px;height:96px;mix-blend-mode:normal}
+nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:18px clamp(18px,4vw,48px);mix-blend-mode:difference}
+nav img{height:44px;filter:invert(1)}nav .l{display:flex;gap:clamp(12px,2.4vw,34px);font:700 15px var(--font-body);letter-spacing:.04em}nav a{text-decoration:none}
+.hero{height:220vh;position:relative}
+.stick{position:sticky;top:0;height:100vh;display:grid;place-items:center;overflow:hidden}
+.ttl{font:500 clamp(80px,19vw,300px)/.82 var(--font-display);text-align:center;background:url(../../assets/photos/jardin-casa.jpg) center 60%/cover;-webkit-background-clip:text;background-clip:text;color:transparent;position:relative;z-index:2;transition:opacity .2s}
+.frame{position:absolute;inset:0;margin:auto;width:30vw;height:40vh;border-radius:40px;background:url(../../assets/photos/jardin-casa.jpg) center 60%/cover;will-change:width,height,border-radius}
+.sub{position:absolute;bottom:6vh;left:0;right:0;text-align:center;font:400 clamp(30px,4vw,56px)/1 var(--font-chunky);color:var(--cielo-200);z-index:3}
+.eyebrow{font:800 13px/1 var(--font-body);letter-spacing:.2em;color:var(--cielo-200)}
+h2{font:500 clamp(50px,8vw,130px)/.9 var(--font-display);margin:16px 0 0}
+section{padding:clamp(80px,12vw,160px) 0}
+.stack{margin-top:60px;display:flex;flex-direction:column;gap:0}
+.card{position:sticky;top:12vh;min-height:68vh;border-radius:44px;border:3px solid var(--tinta);color:var(--tinta);display:grid;grid-template-columns:1.1fr 1fr;overflow:hidden;margin-bottom:6vh;box-shadow:0 -20px 60px -20px rgba(0,0,0,.6)}
+@media(max-width:760px){.card{grid-template-columns:1fr}.card .ph{min-height:260px}}
+.card .tx{padding:clamp(28px,4vw,56px);display:flex;flex-direction:column;gap:18px}
+.card h3{font:500 clamp(42px,5vw,78px)/.95 var(--font-display);margin:0}
+.card .p{font:400 clamp(96px,12vw,180px)/.9 var(--font-chunky);margin-top:auto}
+.card .ph{background-size:cover;background-position:center;border-left:3px solid var(--tinta)}
+.card ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font:600 19px/1.3 var(--font-body)}
+.card li{display:flex;gap:12px;align-items:center}.card li::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--tinta);flex:none}
+.calc{margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:40px;align-items:center}
+.seg{display:flex;flex-wrap:wrap;gap:6px;background:#222;border-radius:30px;padding:6px;width:max-content;max-width:100%}
+.seg button{white-space:nowrap;border:0;border-radius:999px;padding:14px 22px;font:800 16px var(--font-body);background:transparent;color:var(--crema);cursor:none}
+.seg button.on{background:var(--cielo-200);color:var(--tinta)}
+input[type=range]{width:100%;accent-color:var(--mandarina-400);height:40px;cursor:none}
+.tot{font:400 clamp(84px,11vw,190px)/.85 var(--font-chunky);color:var(--sol-400)}
+.lbl{font:500 34px/1 var(--font-display)}
+.mar{white-space:nowrap;overflow:hidden;border-block:2px solid #333;padding:28px 0}
+.mar div{display:inline-flex;gap:30px;animation:mq 30s linear infinite}
+.mar i{width:clamp(220px,24vw,340px);aspect-ratio:4/5;border-radius:30px;background-size:cover;background-position:center;flex:none;transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+.mar i:hover{transform:scale(1.06) rotate(-2deg)}
+@keyframes mq{to{transform:translateX(-50%)}}
+.game{position:relative;height:420px;border-radius:44px;background:#1f1f1f;border:2px solid #333;overflow:hidden;touch-action:none;margin-top:40px}
+.fx-ball{position:absolute;left:0;top:0;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3c4,var(--sol-400) 55%,var(--sol-600));cursor:grab;z-index:3}
+.fx-dog{position:absolute;right:10%;bottom:16%;width:180px;aspect-ratio:1;border-radius:50%;background:url(../../assets/photos/bulldog-aspersor.jpg) 30% 40%/200% no-repeat;border:3px solid var(--cielo-200)}
+.fx-pop{color:var(--cielo-200)}
+footer{padding:60px 0;border-top:2px solid #333}
+.pill{display:inline-flex;align-items:center;gap:10px;border:2px solid var(--crema);border-radius:999px;padding:14px 24px;font:800 16px var(--font-body);text-decoration:none;transition:all .25s}.pill:hover{background:var(--cielo-200);color:var(--tinta);border-color:var(--cielo-200)}
+</style></head><body>
+<div class="cur" id="cur"></div>
+<nav><img src="../../assets/logo/mark-ink.png" alt="Casa Huellitas"><div class="l"><a href="#servicios" data-wipe>Servicios</a><a href="#calcula" data-wipe>Calcula</a><a href="#galeria" data-wipe>Galería</a><a href="https://www.instagram.com/casa_huellitas">Instagram</a></div></nav>
+<header class="hero"><div class="stick"><div class="frame" id="frame"></div><div class="ttl" id="ttl">SIN<br>JAULAS</div><div class="sub">hotel casa huellitas</div></div></header>
+<section id="servicios"><div class="wrap">
+<div class="eyebrow" data-reveal>¿CUÁNTO CUESTA?</div><h2 data-reveal>ELIGE SU<br>PLAN</h2>
+<div class="stack">
+<article class="card" style="background:var(--cielo-200)"><div class="tx"><div style="font:800 13px var(--font-body);letter-spacing:.2em">01 · POR NOCHE</div><h3>HOTEL /<br>PENSIÓN</h3><ul><li>Entrada y salida 9 am – 2 pm</li><li>¿Sales tarde? +$200, máx. 6 pm</li><li>Videos diarios de su estancia</li></ul><div class="p">$350</div></div><div class="ph" data-hover="ver" style="background-image:url(../../assets/photos/alberca-pelota.jpg)"></div></article>
+<article class="card" style="background:var(--sol-400)"><div class="tx"><div style="font:800 13px var(--font-body);letter-spacing:.2em">02 · POR DÍA</div><h3>GUARDERÍA /<br>DAYPASS</h3><ul><li>10:00 am – 6:00 pm</li><li>Juego, pasto y alberca</li><li>Transporte L–V, se cotiza</li></ul><div class="p">$200</div></div><div class="ph" data-hover="ver" style="background-image:url(../../assets/photos/aspersor-perro.jpg)"></div></article>
+<article class="card" style="background:var(--pasto-200)"><div class="tx"><div style="font:800 13px var(--font-body);letter-spacing:.2em">03 · ¿PUEDE QUEDARSE?</div><h3>REQUI-<br>SITOS</h3><ul><li>Vacunas: Séxtuple, Bordetella, Giardia, Rabia</li><li>Desparasitado + antipulgas</li><li>100% sociable · sin celo</li></ul><div style="margin-top:auto;font:700 18px/1.3 var(--font-body)">¿Le falta alguna vacuna? Aquí se la ponemos.</div></div><div class="ph" data-hover="ver" style="background-image:url(../../assets/photos/selfie.jpg);background-position:60% 40%"></div></article>
+</div></div></section>
+<section id="calcula" style="background:#1a1a1a"><div class="wrap">
+<div class="eyebrow" data-reveal>CALCULA</div><h2 data-reveal>¿CUÁNTO SERÍA?</h2>
+<div class="calc"><div style="display:flex;flex-direction:column;gap:28px">
+<div class="seg" id="seg"><button class="on" data-p="350" data-u="noche" data-us="noches">Hotel / Pensión</button><button data-p="200" data-u="día" data-us="días">Guardería / Daypass</button></div>
+<div><div class="lbl" id="lbl">3 NOCHES</div><input type="range" id="rng" min="1" max="15" value="3"></div>
+<div style="font:600 17px/1.4 var(--font-body);color:var(--tinta-40)">Precio por perrito. Transporte y baño se cotizan aparte.</div></div>
+<div class="tot" id="tot">$1,050</div></div>
+</div></section>
+<section id="galeria" style="padding-bottom:40px"><div class="wrap"><div class="eyebrow" data-reveal>INSTALACIONES</div><h2 data-reveal>COMO EN CASA</h2></div>
+<div class="mar" style="margin-top:50px"><div>
+<i style="background-image:url(../../assets/photos/jardin-casa.jpg)"></i><i style="background-image:url(../../assets/photos/alberca-pelota.jpg)"></i><i style="background-image:url(../../assets/photos/aspersor-jardin.jpg)"></i><i style="background-image:url(../../assets/photos/bulldog-aspersor.jpg)"></i><i style="background-image:url(../../assets/photos/selfie.jpg)"></i><i style="background-image:url(../../assets/photos/aspersor-perro.jpg)"></i>
+<i style="background-image:url(../../assets/photos/jardin-casa.jpg)"></i><i style="background-image:url(../../assets/photos/alberca-pelota.jpg)"></i><i style="background-image:url(../../assets/photos/aspersor-jardin.jpg)"></i><i style="background-image:url(../../assets/photos/bulldog-aspersor.jpg)"></i><i style="background-image:url(../../assets/photos/selfie.jpg)"></i><i style="background-image:url(../../assets/photos/aspersor-perro.jpg)"></i>
+</div></div>
+<div class="wrap"><div class="game" id="game"><div style="position:absolute;left:28px;top:24px;font:500 28px var(--font-display);z-index:2">ARRÁSTRALA Y LÁNZALA · <span id="sc">0</span></div><div class="fx-ball"></div><div class="fx-dog"></div></div></div></section>
+<footer><div class="wrap" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:30px;align-items:center"><img src="../../assets/logo/logo-white.png" alt="Casa Huellitas" style="height:140px"><div style="display:flex;gap:12px;flex-wrap:wrap"><a class="pill" href="https://www.instagram.com/casa_huellitas">@casa_huellitas</a><a class="pill" href="https://g.co/kgs/T5Ybaf">Agua Blanca · Cómo llegar</a></div></div></footer>
+<script src="fx.js"></script>
+<script>
+const F=HuellitasFX;F.pawTrail('var(--cielo-200)');F.reveal();F.wipe('../../assets/logo/mark-ink.png');
+const cur=document.getElementById('cur');let cx=0,cy=0,tx=0,ty=0;addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY});(function l(){cx+=(tx-cx)*.2;cy+=(ty-cy)*.2;cur.style.transform=`translate(${cx-cur.offsetWidth/2}px,${cy-cur.offsetHeight/2}px)`;requestAnimationFrame(l)})();
+document.addEventListener('pointerover',e=>{const h=e.target.closest('[data-hover],a,button,.fx-ball');cur.classList.toggle('big',!!h&&!!h.dataset.hover);cur.textContent=h&&h.dataset.hover?h.dataset.hover:''});
+const fr=document.getElementById('frame'),tt=document.getElementById('ttl'),hero=document.querySelector('.hero');
+addEventListener('scroll',()=>{const p=Math.min(1,Math.max(0,scrollY/(hero.offsetHeight-innerHeight)));const e=1-Math.pow(1-p,3);fr.style.width=(30+70*e)+'vw';fr.style.height=(40+60*e)+'vh';fr.style.borderRadius=(40*(1-e))+'px';tt.style.opacity=1-p*1.6},{passive:true});
+const seg=document.getElementById('seg'),rng=document.getElementById('rng');let cur2=seg.querySelector('.on');
+const upd=()=>{const n=+rng.value,p=+cur2.dataset.p;document.getElementById('lbl').textContent=n+' '+(n>1?cur2.dataset.us:cur2.dataset.u).toUpperCase();const t=document.getElementById('tot');t.textContent='$'+(n*p).toLocaleString('es-MX');t.animate([{transform:'scale(1.08)'},{transform:'scale(1)'}],{duration:300,easing:'cubic-bezier(.34,1.56,.64,1)'})};
+seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');cur2=b;upd()});rng.addEventListener('input',upd);
+F.ballGame(document.getElementById('game'),n=>document.getElementById('sc').textContent=n);
+</script></body></html>

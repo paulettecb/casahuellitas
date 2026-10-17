@@ -1,0 +1,20 @@
+:root{
+--font-display:"Friendship","Hanken Grotesk",system-ui,sans-serif;
+--font-chunky:"Sweet Creamy","Friendship",system-ui,sans-serif;
+--font-body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+
+--fs-hero:clamp(56px,8vw,112px);/* @kind font */--fs-h1:64px;/* @kind font */--fs-h2:44px;/* @kind font */--fs-h3:30px;/* @kind font */--fs-h4:22px;/* @kind font */--fs-lead:20px;/* @kind font */--fs-body:17px;/* @kind font */--fs-small:15px;/* @kind font */--fs-caption:13px;/* @kind font */--fs-overline:12px;/* @kind font */
+--lh-tight:0.95;/* @kind font */--lh-heading:1.05;/* @kind font */--lh-snug:1.3;/* @kind font */--lh-body:1.55;/* @kind font */
+--ls-display:0.01em;/* @kind font */--ls-overline:0.14em;/* @kind font */
+--fw-regular:400;/* @kind font */--fw-medium:500;/* @kind font */--fw-semibold:600;/* @kind font */--fw-bold:700;/* @kind font */--fw-black:800;/* @kind font */
+
+--type-hero:400 var(--fs-hero)/var(--lh-tight) var(--font-chunky);/* @kind font */
+--type-h1:500 var(--fs-h1)/var(--lh-heading) var(--font-display);/* @kind font */
+--type-h2:500 var(--fs-h2)/var(--lh-heading) var(--font-display);/* @kind font */
+--type-h3:500 var(--fs-h3)/var(--lh-snug) var(--font-display);/* @kind font */
+--type-h4:700 var(--fs-h4)/var(--lh-snug) var(--font-body);/* @kind font */
+--type-lead:400 var(--fs-lead)/var(--lh-body) var(--font-body);/* @kind font */
+--type-body:400 var(--fs-body)/var(--lh-body) var(--font-body);/* @kind font */
+--type-small:400 var(--fs-small)/var(--lh-body) var(--font-body);/* @kind font */
+--type-overline:700 var(--fs-overline)/1 var(--font-body);/* @kind font */
+}

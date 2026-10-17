@@ -1,0 +1,24 @@
+:root{
+/* Cielo — the logo blue (#C3E7FB sampled from the logo badge) */
+--cielo-50:#F2FAFE;--cielo-100:#E1F3FD;--cielo-200:#C3E7FB;--cielo-300:#93D0F2;--cielo-400:#5DB2E3;--cielo-500:#2F8FCB;--cielo-600:#1F72A8;--cielo-700:#185A85;--cielo-800:#12425F;--cielo-900:#0C2B3E;
+/* Tinta — the logo black */
+--tinta:#141414;--tinta-80:#3A3A38;--tinta-60:#6A6965;--tinta-40:#A3A19B;--tinta-20:#D9D6CE;--tinta-10:#ECE9E2;
+/* Crema / Arena — warm grounds */
+--crema:#FCF8F1;--arena-100:#F6EEE0;--arena-200:#EADCC4;--blanco:#FFFFFF;
+/* Accents — playful pops */
+--sol-200:#FFE7A3;--sol-400:#FFC93C;--sol-600:#D9A11A;
+--mandarina-200:#FFD3BC;--mandarina-400:#FF8A4C;--mandarina-600:#E2672A;--mandarina-700:#B84E1A;
+--pasto-200:#CDEBC4;--pasto-400:#6DBE6B;--pasto-600:#3E8E44;
+--chicle-200:#FBD5DE;--chicle-400:#F28DA6;--chicle-600:#C9566F;
+--alerta-400:#E5484D;--alerta-600:#B8323A;
+
+/* Semantic */
+--bg-page:var(--crema);--bg-alt:var(--cielo-100);--bg-brand:var(--cielo-200);--bg-inverse:var(--tinta);
+--surface-card:var(--blanco);--surface-sunken:var(--arena-100);--surface-brand:var(--cielo-200);
+--text-strong:var(--tinta);--text-body:var(--tinta-80);--text-muted:var(--tinta-60);--text-inverse:var(--crema);--text-link:var(--cielo-700);--text-link-hover:var(--cielo-900);
+--border-default:var(--tinta-20);--border-strong:var(--tinta);--border-brand:var(--cielo-300);
+--action-primary:var(--mandarina-400);--action-primary-hover:var(--mandarina-600);--action-primary-press:var(--mandarina-700);--action-primary-text:var(--tinta);
+--action-secondary:var(--tinta);--action-secondary-hover:var(--tinta-80);
+--focus-ring:var(--cielo-500);
+--success:var(--pasto-600);--success-bg:var(--pasto-200);--warning:var(--sol-600);--warning-bg:var(--sol-200);--danger:var(--alerta-600);--danger-bg:#FBD9D9;--info:var(--cielo-700);--info-bg:var(--cielo-100);
+}

@@ -1,0 +1,149 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reservar — Casa Huellitas</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="site.css"><style>
+.phero{padding-bottom:150px}
+.rz{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items:start;margin-top:-100px;position:relative;z-index:3;padding-bottom:100px}
+@media(max-width:980px){.rz{grid-template-columns:1fr}}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.steps button{display:flex;align-items:center;gap:8px;border:3px solid var(--tinta);border-radius:999px;background:#fff;padding:8px 16px 8px 8px;font:800 14px var(--font-body);color:var(--tinta);cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1)}
+.steps button i{width:30px;height:30px;border-radius:50%;border:2px solid var(--tinta);display:grid;place-items:center;font:800 13px/1 var(--font-body);font-style:normal}
+.steps button.on{background:var(--tinta);color:var(--crema)}.steps button.on i{background:var(--sol-400);color:var(--tinta)}
+.steps button.done i{background:var(--pasto-400)}.steps button:disabled{opacity:.45;cursor:default}
+.pane{display:none}.pane.on{display:block;animation:pin .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pin{from{opacity:0;transform:translateY(24px)}}
+.pane h3{font:500 clamp(34px,3.6vw,50px)/1.1 var(--font-display);margin:0 0 6px}
+.pane .lead{font:600 18px/1.4 var(--font-body);margin:0 0 26px;color:var(--tinta-60)}
+.lab{display:block;font:800 13px/1 var(--font-body);letter-spacing:.14em;margin:26px 0 10px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}@media(max-width:620px){.opts{grid-template-columns:1fr}}
+.opt{position:relative;display:flex;flex-direction:column;gap:8px;border:3px solid var(--tinta);border-radius:30px;padding:24px;background:#fff;cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);min-height:190px}
+.opt input{position:absolute;opacity:0}
+.opt:has(input:checked){box-shadow:8px 8px 0 var(--tinta);transform:translate(-3px,-3px) rotate(-.8deg)}
+.opt .n{font:400 clamp(54px,5vw,72px)/1 var(--font-chunky);margin-top:auto}.opt b{font:500 28px/1.1 var(--font-display)}.opt small{font:600 15px/1.35 var(--font-body)}
+.opt .ck{position:absolute;right:18px;top:18px;width:40px;height:40px;border:3px solid var(--tinta);border-radius:50%;background:#fff;display:grid;place-items:center;color:transparent;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.opt:has(input:checked) .ck{background:var(--tinta);color:var(--crema);transform:scale(1.1) rotate(-8deg)}
+.cal{border:3px solid var(--tinta);border-radius:30px;background:#fff;padding:20px;max-width:560px}
+.cal .hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal .hd b{font:500 28px/1 var(--font-display)}
+.cal .hd button{width:48px;height:48px;border-radius:50%;border:3px solid var(--tinta);background:var(--cielo-200);cursor:pointer;display:grid;place-items:center}
+.cal .g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal .dw{font:800 12px/1 var(--font-body);letter-spacing:.1em;padding:8px 0;color:var(--tinta-60)}
+.cal .d{aspect-ratio:1;border:0;background:transparent;border-radius:14px;font:700 17px var(--font-body);color:var(--tinta);cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.cal .d:hover:not(:disabled){background:var(--cielo-100);transform:scale(1.08)}
+.cal .d:disabled{color:var(--tinta-20);cursor:default}
+.cal .d.in{background:var(--cielo-200);border-radius:0}
+.cal .d.s,.cal .d.e,.cal .d.pk{background:var(--tinta);color:var(--crema);border-radius:14px}
+.cal .d.today{box-shadow:inset 0 0 0 2px var(--tinta)}
+.times{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:560px}@media(max-width:520px){.times{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:3px solid var(--tinta);border-radius:999px;background:#fff;padding:10px 14px;font:700 15px var(--font-body);cursor:pointer;color:var(--tinta);transition:all .2s cubic-bezier(.34,1.56,.64,1)}
+.chips button.on{background:var(--tinta);color:var(--crema);transform:rotate(-3deg)}
+.chips button.late{border-style:dashed}.chips button.late.on{background:var(--sol-400);color:var(--tinta);border-style:solid}
+.f{display:flex;flex-direction:column;gap:8px}.f label{font:800 13px/1 var(--font-body);letter-spacing:.12em}
+.f input,.f select,.f textarea{height:58px;border:3px solid var(--tinta);border-radius:18px;padding:0 18px;font:600 18px var(--font-body);background:#fff;color:var(--tinta);outline:0;transition:box-shadow .2s;width:100%}
+.f textarea{height:110px;padding:14px 18px;resize:vertical}
+.f input:focus,.f select:focus,.f textarea:focus{box-shadow:5px 5px 0 var(--cielo-500)}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.row3{display:grid;grid-template-columns:2fr 2fr 1fr;gap:16px}
+@media(max-width:620px){.row2,.row3{grid-template-columns:1fr}}
+.dog{border:3px solid var(--tinta);border-radius:30px;padding:24px;background:#fff;display:flex;flex-direction:column;gap:16px;margin-bottom:18px;position:relative}
+.dog .t{display:flex;align-items:center;gap:12px;font:500 28px/1 var(--font-display)}
+.dog .x{position:absolute;right:16px;top:16px;width:42px;height:42px;border-radius:50%;border:3px solid var(--tinta);background:#fff;cursor:pointer;display:grid;place-items:center}
+.up{display:flex;align-items:center;gap:16px;border:3px dashed var(--tinta);border-radius:20px;padding:16px 18px;cursor:pointer;background:var(--crema);transition:background .2s}
+.up:hover{background:var(--cielo-100)}.up input{display:none}.up.ok{border-style:solid;background:var(--pasto-200)}
+.up b{font:700 16px var(--font-body)}.up small{display:block;font:600 14px var(--font-body);color:var(--tinta-60)}
+.reqs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}@media(max-width:620px){.reqs{grid-template-columns:1fr}}
+.reqs label{display:flex;gap:16px;align-items:center;background:#fff;border:3px solid var(--tinta);border-radius:24px;padding:20px;cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.reqs input{position:absolute;opacity:0}.reqs .bx{width:48px;height:48px;flex:none;border:3px solid var(--tinta);border-radius:14px;display:grid;place-items:center;color:transparent;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.reqs label:has(input:checked){background:var(--pasto-200);box-shadow:6px 6px 0 var(--tinta)}.reqs input:checked+.bx{background:var(--pasto-400);color:var(--tinta);transform:rotate(-8deg)}
+.reqs b{display:block;font:500 24px/1.1 var(--font-display)}.reqs small{font:600 15px/1.3 var(--font-body)}
+.note{display:flex;gap:16px;align-items:center;border:3px solid var(--tinta);border-radius:24px;padding:18px 22px;background:var(--sol-200);font:600 16px/1.4 var(--font-body);margin-top:20px}
+.note.warn{background:var(--chicle-200)}
+.tg{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#fff;border:3px solid var(--tinta);border-radius:24px;padding:18px 20px;cursor:pointer}
+.tg b{font:700 18px var(--font-body);display:block}.tg small{font:600 14px var(--font-body);color:var(--tinta-60)}
+.tg input{position:absolute;opacity:0}.tg .sw{width:64px;height:36px;flex:none;border:3px solid var(--tinta);border-radius:999px;background:var(--tinta-10);position:relative;transition:background .25s}
+.tg .sw::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid var(--tinta);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.tg:has(input:checked) .sw{background:var(--pasto-400)}.tg:has(input:checked) .sw::after{transform:translateX(28px)}
+.nav2{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:36px;padding-top:24px;border-top:3px solid var(--tinta)}
+.nav2 .hint{font:600 15px var(--font-body);color:var(--tinta-60)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:4px 4px 0 var(--tinta)}
+.sum{position:sticky;top:100px;background:var(--cielo-200);display:flex;flex-direction:column;gap:14px}
+.sum h4{font:500 30px/1 var(--font-display);margin:0}
+.sum .ln{display:flex;justify-content:space-between;gap:12px;font:600 16px/1.35 var(--font-body);padding-bottom:10px;border-bottom:2px dashed var(--tinta-20)}
+.sum .ln span:first-child{color:var(--tinta-60)}.sum .ln span:last-child{text-align:right}
+.sum .tot{font:400 clamp(64px,6vw,84px)/1 var(--font-chunky);white-space:nowrap}
+.sum small{font:600 13px/1.4 var(--font-body);color:var(--tinta-60)}
+.done{display:none;text-align:center;padding:40px 10px}.done.on{display:block;animation:pin .6s cubic-bezier(.34,1.56,.64,1)}
+.done .big{width:130px;height:130px;margin:0 auto;border-radius:50%;background:var(--pasto-400);border:4px solid var(--tinta);display:grid;place-items:center;box-shadow:6px 6px 0 var(--tinta);animation:pop .7s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(0) rotate(-40deg)}}
+.done h3{font:500 clamp(44px,5.6vw,76px)/1.1 var(--font-display);margin:28px 0 14px}
+.code{display:inline-block;font:500 34px/1 var(--font-display);background:#fff;border:3px solid var(--tinta);border-radius:999px;padding:14px 26px;box-shadow:5px 5px 0 var(--tinta);letter-spacing:.06em}
+.tl{display:flex;flex-direction:column;gap:0;max-width:520px;margin:36px auto 0;text-align:left}
+.tl div{display:flex;gap:16px;align-items:flex-start;padding:0 0 20px 0;position:relative}
+.tl div::before{content:"";position:absolute;left:21px;top:44px;bottom:0;width:3px;background:var(--tinta-20)}.tl div:last-child::before{display:none}
+.tl i{width:44px;height:44px;flex:none;border-radius:50%;border:3px solid var(--tinta);display:grid;place-items:center;background:#fff;font-style:normal}
+.tl div.ok i{background:var(--pasto-400)}.tl b{display:block;font:500 24px/1.1 var(--font-display)}.tl span{font:600 15px/1.4 var(--font-body);color:var(--tinta-60)}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:70}
+</style></head><body>
+<header class="phero"><div class="wrap"><div class="eyebrow" data-reveal>EN 5 PASITOS</div><h1 data-reveal data-delay="80">reserva</h1><p data-reveal data-delay="160">Elige servicio y fechas, cuéntanos de tu perrito y listo. Te confirmamos disponibilidad.</p></div></header>
+<div class="wrap"><div class="rz">
+<div class="card" id="form">
+<div class="steps" id="steps"></div>
+
+<div class="pane on" data-step="0"><h3>¿Qué necesitas?</h3><p class="lead">Precio por perrito.</p>
+<div class="opts">
+<label class="opt" style="background:var(--cielo-200)"><input type="radio" name="svc" value="hotel" checked><span class="ck"><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/check.svg)"></i></span><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/moon.svg);width:40px;height:40px"></i><b>HOTEL / PENSIÓN</b><small>Se queda a dormir · entrada y salida 9 am – 2 pm</small><span class="n">$350<small style="font:700 16px var(--font-body)"> /noche</small></span></label>
+<label class="opt" style="background:var(--sol-400)"><input type="radio" name="svc" value="day"><span class="ck"><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/check.svg)"></i></span><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/sun.svg);width:40px;height:40px"></i><b>GUARDERÍA / DAYPASS</b><small>Pasa el día jugando · 10 am – 6 pm</small><span class="n">$200<small style="font:700 16px var(--font-body)"> /día</small></span></label>
+</div></div>
+
+<div class="pane" data-step="1"><h3 id="dTitle">¿Qué noches?</h3><p class="lead" id="dLead">Toca el día de entrada y luego el de salida.</p>
+<div class="cal" id="cal"></div>
+<div class="times" style="margin-top:8px"><div><span class="lab">HORA DE ENTRADA</span><div class="chips" id="tin"></div></div><div><span class="lab">HORA DE SALIDA</span><div class="chips" id="tout"></div></div></div>
+<div class="note" id="lateNote" style="display:none"><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/clock.svg);width:30px;height:30px"></i><span>Salida después de las 2:00 pm: se suma un daypass de <b>$200</b>. Lo más tarde es 6:00 pm.</span></div>
+</div>
+
+<div class="pane" data-step="2"><h3>Tu perrito</h3><p class="lead">¿Vienen varios? Agrégalos todos.</p>
+<div id="dogs"></div>
+<button class="btn wh" id="addDog" type="button"><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/plus.svg)"></i>Agregar otro perrito</button>
+</div>
+
+<div class="pane" data-step="3"><h3>¿Puede quedarse?</h3><p class="lead">Palomea los 4 requisitos.</p>
+<div class="reqs" id="reqs"></div>
+<div class="note"><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/syringe.svg);width:30px;height:30px"></i><span><b>¿Le falta alguna vacuna?</b> Aquí se la ponemos. Pregunta por nuestros precios actualizados.</span></div>
+<div class="note warn"><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/triangle-alert.svg);width:30px;height:30px"></i><span>Si muestra conductas agresivas habrá que recogerlo y se cobra 1 noche. No nos hacemos responsables por collares, ropa o accesorios.</span></div>
+</div>
+
+<div class="pane" data-step="4"><h3>Tus datos</h3><p class="lead">Para confirmarte la reserva.</p>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div class="f"><label for="oName">NOMBRE DEL DUEÑO</label><input id="oName" autocomplete="name"></div>
+<div class="row2"><div class="f"><label for="oPhone">WHATSAPP</label><input id="oPhone" inputmode="tel" placeholder="33 1234 5678"></div><div class="f"><label for="oMail">CORREO (OPCIONAL)</label><input id="oMail" type="email"></div></div>
+</div>
+<span class="lab">EXTRAS</span>
+<div style="display:flex;flex-direction:column;gap:12px">
+<label class="tg"><div><b>Transporte</b><small>Lunes a viernes · se cotiza con tu ubicación</small></div><input type="checkbox" id="xTrans"><span class="sw"></span></label>
+<div class="f" id="addrBox" style="display:none"><label for="oAddr">TU UBICACIÓN</label><input id="oAddr" placeholder="Colonia, calle o link de Google Maps"></div>
+<label class="tg"><div><b>Baño</b><small>Te cotizamos con la foto de tu perro</small></div><input type="checkbox" id="xBath"><span class="sw"></span></label>
+</div>
+<span class="lab">¿CÓMO VAS A PAGAR?</span>
+<p style="margin:-2px 0 12px;font:600 15px var(--font-body);color:var(--tinta-60)">Se paga al llegar.</p>
+<div class="chips" id="pay"><button type="button" data-v="Efectivo">Efectivo</button><button type="button" data-v="Transferencia">Transferencia</button></div>
+<div class="f" style="margin-top:20px"><label for="oNotes">ALGO QUE DEBAMOS SABER (OPCIONAL)</label><textarea id="oNotes" placeholder="Medicamentos, miedos, mañas…"></textarea></div>
+</div>
+
+<div class="done" id="done"><div class="big"><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/check.svg);width:70px;height:70px"></i></div><h3>¡SOLICITUD ENVIADA!</h3><div class="code" id="code">CH-0000</div>
+<div class="tl"><div class="ok"><i><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/check.svg)"></i></i><p style="margin:0"><b>Recibimos tu solicitud</b><span>Guarda tu código de reserva.</span></p></div>
+<div><i>2</i><p style="margin:0"><b>Revisamos disponibilidad</b><span>Te confirmamos por WhatsApp.</span></p></div>
+<div><i>3</i><p style="margin:0"><b>¡Nos vemos!</b><span>Trae su alimento y su cartilla.</span></p></div></div>
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px"><a class="btn" href="index.html" data-go>Volver al inicio</a><button class="btn wh" id="again" type="button">Hacer otra reserva</button></div></div>
+
+<div class="nav2" id="nav2"><button class="btn wh" id="back" type="button"><i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/arrow-left.svg)"></i>Atrás</button><span class="hint" id="hint"></span><button class="btn dk" id="nextB" type="button">Siguiente<i class="ic" style="--i:url(https://unpkg.com/lucide-static@0.460.0/icons/arrow-right.svg)"></i></button></div>
+</div>
+
+<aside class="card sum" id="sum"><div class="eyebrow">TU RESERVA</div><h4 id="sSvc">Hotel / Pensión</h4>
+<div class="ln"><span>Fechas</span><span id="sDates">—</span></div>
+<div class="ln"><span>Horario</span><span id="sTimes">—</span></div>
+<div class="ln"><span>Perritos</span><span id="sDogs">—</span></div>
+<div class="ln"><span>Subtotal</span><span id="sSub">—</span></div>
+<div class="ln" id="sLateRow" style="display:none"><span>Salida tarde</span><span id="sLate">—</span></div>
+<div><div class="eyebrow">TOTAL APROXIMADO</div><div class="tot" id="sTot">$0</div></div>
+<small id="sNote">Transporte y baño se cotizan aparte. Se paga al llegar.</small></aside>
+</div></div>
+<canvas id="confetti"></canvas>
+<script src="fx.js"></script><script src="site.js"></script><script src="reservas.js"></script>
+</body></html>
